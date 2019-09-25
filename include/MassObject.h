@@ -1,14 +1,22 @@
 #ifndef MASS_OBJECT
 #define MASS_OBJECT
+#include "Vec2.h"
 
 class MassObject
 {
     private:
-        double m;
-        double vx;
-        double vy;
     public:
-        MassObject() { m = vx = vy = 0; }
+        Vec2 pos;
+        long double m;
+        Vec2 v;
+        MassObject() { m = 0; }
+        MassObject(Vec2& pos, long double m, Vec2& v)
+        {
+            this->pos = pos;
+            this->m = m;
+            this->v = v;
+        }
+        void print();
 };
 
 #endif
