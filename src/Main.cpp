@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<MassObject> objects = vector<MassObject>(2);
+vector<MassObject> objects = vector<MassObject>(3);
 
 
 void init()
@@ -18,12 +18,16 @@ void init()
     curs_set(0);
     Vec2 pos = Vec2(500e9, 250e9);
     Vec2 v = Vec2();
-    MassObject sol = MassObject(pos, 2e30, v);
+    MassObject sol = MassObject(pos, 4e30, v);
     pos = Vec2(500e9, 1.004e11);
     v = Vec2(3e4, 0);
     MassObject tierra = MassObject(pos, 6e24, v);
+    pos = Vec2(500e9, 50.4e9);
+    v = Vec2(-3e4, 0);
+    MassObject marte = MassObject(pos, 3000e24, v);
     objects[0] = sol;
     objects[1] = tierra;
+    objects[2] = marte;
 }
 
 Vec2 calculate_force(const MassObject& focus)
