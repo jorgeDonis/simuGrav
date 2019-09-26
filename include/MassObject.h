@@ -16,6 +16,8 @@ class MassObject
             this->m = m;
             this->v = v;
         }
+        bool operator==(const MassObject&) const;
+        bool operator!=(const MassObject&) const;
         void print();
 };
 

@@ -13,7 +13,7 @@ Vec2& Vec2::operator=(const Vec2& b)
 {
     if (this != &b)
     {
-        delete this;
+        this->~Vec2();
         this->x = b.x;
         this->y = b.y;
     }
@@ -33,10 +33,20 @@ double Vec2::distance_to(const Vec2& b) const
     return sqrt(pow(x,2) + pow(y,2));
 }
 
-Vec2 Vec2::directionTo(const Vec2& b)
+Vec2 Vec2::directionTo(const Vec2& b) const
 {
     double x = b.x - this->x;
     double y = b.y - this->y;
     double module = sqrt(pow(x,2) + pow(y,2));
     return Vec2(x / module, y / module);
+}
+
+bool Vec2::operator==(const Vec2& b) const
+{
+    return (b.x == x && b.y == y);
+}
+
+bool Vec2::operator!=(const Vec2& b) const
+{
+    return !(b == *this);
 }

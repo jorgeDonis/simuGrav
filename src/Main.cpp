@@ -3,44 +3,66 @@
 #include "MassObject.h"
 #include "constants.h"
 #include <cmath>
+#include <curses.h>
+#include <unistd.h>
 
 using namespace std;
 
-vector<MassObject> objects;
+vector<MassObject> objects = vector<MassObject>(2);
+
 
 void init()
 {
+    initscr();
+    wborder(stdscr, 0, 0, 0, 0, 0, 0, 0, 0);
+    curs_set(0);
     Vec2 pos = Vec2(500e9, 250e9);
     Vec2 v = Vec2();
     MassObject sol = MassObject(pos, 2e30, v);
-    pos = Vec2(400e9, 0);
+    pos = Vec2(500e9, 1.004e11);
     v = Vec2(3e4, 0);
     MassObject tierra = MassObject(pos, 6e24, v);
-    objects.push_back(sol);
-    objects.push_back(tierra);
+    objects[0] = sol;
+    objects[1] = tierra;
 }
 
 Vec2 calculate_force(const MassObject& focus)
 {
     Vec2 force = Vec2();
-    for (MassObject object : objects)
+    for (MassObject& object : objects)
     {
-        double force_magnitude = G * (object.m / pow(focus.pos.distance_to(object.pos),2));
-        force = force + object.pos.directionTo(object.pos) * force_magnitude;
+        if (object != focus)
+        {
+            double r = focus.pos.distance_to(object.pos);
+            double force_magnitude = G * (object.m * focus.m / pow(r,2));
+            force = force + focus.pos.directionTo(object.pos) * force_magnitude;
+        }
     }
     return force;
 }
 
+void print_universe()
+{
+    erase();
+    for (MassObject& object : objects)
+    {
+        unsigned int text_i = TEXT_HEIGHT - (int) (object.pos.y / HEIGHT_PRINT_RATIO);
+        unsigned int text_j = (int) (object.pos.x / WIDTH_PRINT_RATIO);
+        mvwaddch(stdscr, text_i, text_j, PLANET_CHARACTER);
+    }
+    refresh();
+}
 
 
 int main()
 {
     init();
-    for (int i = 0; i < 5; i++)
+    print_universe();
+    for (int i = 0; i < 10000; i++)
     {
-        for (MassObject object : objects)
+        usleep(MICROSECONDS_BETWEEN_PRINT);
+        for (MassObject& object : objects)
         {
-            object.print();
             //calculate position at delta t
             object.pos.x += object.v.x * SECONDS_BETWEEN_CALC;
             object.pos.y += object.v.y * SECONDS_BETWEEN_CALC;
@@ -49,6 +71,8 @@ int main()
             Vec2 final_v = acc * SECONDS_BETWEEN_CALC;
             object.v = object.v + final_v;
         }
+        print_universe();
     }
+    endwin();
     return 0;
 }
