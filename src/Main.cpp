@@ -57,6 +57,11 @@ void print_universe()
     refresh();
 }
 
+void dondeEstoy(){
+    for(int i=0;i<objects.size();i++){
+        cout<<"planet "<<i<<objects[i].print()<<endl;
+    }
+}
 
 int main()
 {
@@ -75,8 +80,9 @@ int main()
             Vec2 final_v = acc * SECONDS_BETWEEN_CALC;
             object.v = object.v + final_v;
         }
-        print_universe();
+        //print_universe();
     }
+    dondeEstoy();
     endwin();
     return 0;
 }
