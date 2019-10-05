@@ -59,7 +59,7 @@ void print_universe()
 
 void dondeEstoy(){
     for(int i=0;i<objects.size();i++){
-        cout<<"planet "<<i<<objects[i].print()<<endl;
+        cout<<"Planet: "<<i<<objects[i].print()<<endl;
     }
 }
 
